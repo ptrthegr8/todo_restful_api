@@ -16,36 +16,35 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 formatter = logging.Formatter(
-    '%(asctime)s : %(name)s : %(levelname)s : %(message)s')
-
+    '%(asctime)s : %(name)s : %(levelname)s : %(message)s'
+)
 file_handler = logging.handlers.RotatingFileHandler(
     'todos.log', maxBytes=5*1024*1024, backupCount=2
 )
-
 file_handler.setFormatter(formatter)
-
 logger.addHandler(file_handler)
 
 # setting up flask and api
 app = Flask(__name__)
 api = Api(app)
 
+# dictionary that stores data
 TODOS = {
-    '1': {
-        'title': 'collect pollen from flowers',
-        'creation_date': '2018-10-03 12:47:46.264942',
-        'last_updated_date': '2018-10-03 12:47:46.264942',
-        'due_date': None,
-        'completed': True,
-        'completion_date': None
+    "1": {
+        "title": "collect pollen from flowers",
+        "creation_date": "2018-10-03 12:47:46.264942",
+        "last_updated_date": "2018-10-03 12:47:46.264942",
+        "due_date": None,
+        "completed": False,
+        "completion_date": None
     },
-    '2': {
-        'title': 'buzzbuzzbuzz',
-        'creation_date': '2018-10-02 10:31:29.264935',
-        'last_updated_date': '2018-10-02 10:31:29.264935',
-        'due_date': 'soon',
-        'completed': False,
-        'completion_date': None
+    "2": {
+        "title": "buzzbuzzbuzz",
+        "creation_date": "2018-10-02 10:31:29.264935",
+        "last_updated_date": "2018-10-02 10:31:29.264935",
+        "due_date": "soon",
+        "completed": False,
+        "completion_date": None
     },
 }
 
@@ -84,16 +83,18 @@ class TodoListItem(Resource):
     def put(self, todo_id):
         args = parser.parse_args()
         if args['completed']:
-            TODOS[todo_id].update({
-                'completed': (
-                    True if args['completed'].lower() == 'true' else False
-                ),
-                'completion_date': (
-                    str(datetime.now()) if
-                    args['completed'].lower()
-                    == 'true' else None
-                )
-            })
+            TODOS[todo_id].update(
+                {
+                    'completed': (
+                        True if args['completed'].lower()
+                        == 'true' else False
+                    ),
+                    'completion_date': (
+                        str(datetime.now()) if args['completed'].lower(
+                        ) == 'true' else None
+                    )
+                }
+            )
         if args['due_date']:
             TODOS[todo_id].update({
                 'due_date': args['due_date']
@@ -126,14 +127,12 @@ class TodoList(Resource):
             args['due_date'],
             args['completed']
         ).toJSON()
-        logger.info(
-            {'message': 'Todo created: {}'.format(TODOS[todo_id])}
-        )
+        logger.info({'message': 'Todo created: {}'.format(TODOS[todo_id])})
         return {'message': 'Todo created: {}'.format(TODOS[todo_id])}, 201
 
 
-# adding some resources to api endpoints
-api.add_resource(TodoListItem, '/todos/<int:todo_id>')
+# adding some resources with assgined endpoints to api
+api.add_resource(TodoListItem, '/todos/<todo_id>')
 api.add_resource(TodoList, '/todos')
 
 if __name__ == "__main__":
