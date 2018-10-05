@@ -30,22 +30,22 @@ api = Api(app)
 
 # dictionary that stores data
 TODOS = {
-    "1": {
-        "title": "collect pollen from flowers",
-        "creation_date": "2018-10-03 12:47:46.264942",
-        "last_updated_date": "2018-10-03 12:47:46.264942",
-        "due_date": None,
-        "completed": False,
-        "completion_date": None
-    },
-    "2": {
-        "title": "buzzbuzzbuzz",
-        "creation_date": "2018-10-02 10:31:29.264935",
-        "last_updated_date": "2018-10-02 10:31:29.264935",
-        "due_date": "soon",
-        "completed": False,
-        "completion_date": None
-    },
+    # "1": {
+    #     "title": "collect pollen from flowers",
+    #     "creation_date": "2018-10-03 12:47:46.264942",
+    #     "last_updated_date": "2018-10-03 12:47:46.264942",
+    #     "due_date": None,
+    #     "completed": False,
+    #     "completion_date": None
+    # },
+    # "2": {
+    #     "title": "buzzbuzzbuzz",
+    #     "creation_date": "2018-10-02 10:31:29.264935",
+    #     "last_updated_date": "2018-10-02 10:31:29.264935",
+    #     "due_date": "soon",
+    #     "completed": False,
+    #     "completion_date": None
+    # },
 }
 
 
@@ -116,7 +116,7 @@ class TodoList(Resource):
 
     def get(self):
         logger.info({'message': TODOS})
-        return {'message': TODOS}
+        return {'message': TODOS if TODOS else 'No todos yet :('}
 
     def post(self):
         args = parser.parse_args()
