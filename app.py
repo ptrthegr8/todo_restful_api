@@ -58,7 +58,7 @@ def abort_if_no_todo(todo_id):
 
 
 parser = reqparse.RequestParser()
-parser.add_argument('title')
+parser.add_argument('title', required=True, help="title is required!")
 parser.add_argument('due_date')
 parser.add_argument('completed')
 
